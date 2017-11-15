@@ -1,31 +1,13 @@
 import React from 'react'
 import ReactDOM from 'react-dom';
 
-/**
- * Get random value between low & high
- */
-function getRangeRandom(low, high) {
-    return Math.ceil(low + Math.random() * (high - low));
-}
-
-// Get Info of Pictures
-
-let albumPicData = require('./data/albumImg.json');
-albumPicData = ((albumPicArr) => {
-    for (let i = 0, j = albumPicArr.length; i < j; i++) {
-        let temp = albumPicArr[i];
-        temp.imgURL = require('./img/' + temp.fileName);
-        albumPicArr[i] = temp;
-    }
-    return albumPicArr;
-})(albumPicData);
-
 // Component for Album
 
 export default class Album extends React.Component {
     constructor() {
         super();
         this.state = {
+            sb: 0,
             Constant: {
                 centerPos: {
                     left: 0,
@@ -47,17 +29,20 @@ export default class Album extends React.Component {
                         left: 0,
                         top: 0
                     }
-                }, {
+                },
+                {
                     pos: {
                         left: 0,
                         top: 0
                     }
-                }, {
+                },
+                {
                     pos: {
                         left: 0,
                         top: 0
                     }
-                }, {
+                },
+                {
                     pos: {
                         left: 0,
                         top: 0
@@ -69,10 +54,18 @@ export default class Album extends React.Component {
         this.rearrange = this.rearrange.bind(this);
     }
 
+    getInitialState() {
+        return {
+            imgsArrangeArr: [
+
+            ]
+        }
+    }
+
     /* 
-     * Rearrange all the pictures
-     * @param centerIndex indicates which picture is at the center
-     */
+    * Rearrange all the pictures
+    * @param centerIndex indicates which picture is at the center
+    */
     rearrange(centerIndex) {
         let imgsArrangeArr = this.state.imgsArrangeArr,
             Constant = this.state.Constant,
@@ -89,6 +82,15 @@ export default class Album extends React.Component {
             topImgNum = Math.ceil(Math.random() * 2),
             topImgSpliceIndex = 0,
             imgsArrangeCenterArr = imgsArrangeArr.splice(centerIndex, 1);
+
+        console.log('centerPos.top=' + centerPos.top);
+        console.log('centerPos.left=' + centerPos.left);
+        console.log('hPosRange=' + hPosRange);
+        console.log('vPosRange=' + vPosRange);
+        console.log('hPosRangeLeftSecX=' + hPosRangeLeftSecX);
+        console.log('hPosRangeRightSecX=' + hPosRangeRightSecX);
+        console.log('hPosRangeY=' + hPosRangeY);
+        console.log('vPosRangeTopY=' + vPosRangeTopY);
 
         // Fisrt, put the picture of centerIndex to the center
         imgsArrangeCenterArr[0].pos = centerPos;
@@ -151,7 +153,10 @@ export default class Album extends React.Component {
             halfImgW = Math.ceil(imgW / 2),
             halfImgH = Math.ceil(imgH / 2);
 
+        console.log(halfAlbumW - halfImgW);
+        console.log('old sb', this.state.sb);
         this.setState({
+            sb: 1,
             Constant: {
                 centerPos: {
                     left: halfAlbumW - halfImgW,
@@ -168,10 +173,9 @@ export default class Album extends React.Component {
                 },
             },
         });
-
+        console.log('new sb', this.state.sb);
+        console.log('After set', this.state.Constant.centerPos.left);
         this.rearrange(0);
-
-
     }
 
     render() {
@@ -206,11 +210,15 @@ class AlbumImageFigure extends React.Component {
         let styleObj = {};
 
         // If the position of the picture is written, use it.
-        if (this.props.arrange.pos) {
+        if (this.props.arrange) {
             styleObj = this.props.arrange.pos;
-        }
+        };
 
         console.log(styleObj);
+        // styleObj = {
+        //     top: 50,
+        //     left: 50
+        // };
 
         return (
             <figure className="img-figure" style={styleObj}>
@@ -224,3 +232,22 @@ class AlbumImageFigure extends React.Component {
         );
     }
 }
+
+/**
+ * Get random value between low & high
+ */
+function getRangeRandom(low, high) {
+    return Math.ceil(low + Math.random() * (high - low));
+}
+
+// Get Info of Pictures
+
+let albumPicData = require('./data/albumImg.json');
+albumPicData = ((albumPicArr) => {
+    for (let i = 0, j = albumPicArr.length; i < j; i++) {
+        let temp = albumPicArr[i];
+        temp.imgURL = require('./img/' + temp.fileName);
+        albumPicArr[i] = temp;
+    }
+    return albumPicArr;
+})(albumPicData);

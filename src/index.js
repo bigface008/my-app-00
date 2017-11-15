@@ -19,6 +19,6 @@ class App extends React.Component {
 // =======================================
 
 ReactDOM.render(
-  <Panel />,
+  <App />,
   document.getElementById('container')
 )
