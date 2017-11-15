@@ -1,109 +1,89 @@
-import React from 'react';
+import React from 'react'
 import ReactDOM from 'react-dom';
 import './index.css';
+import BackPic01 from './img/timg1.jpg'
+import BackPic02 from './img/timg2.jpg'
+import BackPic03 from './img/timg3.jpg'
+import BackPic04 from './img/timg4.jpg'
 
-class ProductCategoryRow extends React.Component {
-  render() {
-    return (<tr><th colSpan="2">{this.props.category}</th></tr>);
-  }
-}
+const backPicArray = [BackPic01, BackPic02, BackPic03, BackPic04];
 
-class ProductRow extends React.Component {
-  render() {
-    var name = this.props.product.stocked ?
-      this.props.product.name :
-      <span style={{ color: 'red' }}>
-        {this.props.product.name}
-      </span>;
-    return (
-      <tr>
-        <td>{name}</td>
-        <td>{this.props.product.price}</td>
-      </tr>
-    );
-  }
-}
-
-class ProductTable extends React.Component {
-  render() {
-    var rows = [];
-    var lastCategory = null;
-    this.props.products.forEach((product) => {
-      if (product.name.indexOf(this.props.filterText) === -1 || (!product.stocked && this.props.inStockOnly)) {
-        return;
-      }
-      if (product.category !== lastCategory) {
-        rows.push(<ProductCategoryRow category={product.category} key={product.category} />);
-      }
-      rows.push(<ProductRow product={product} key={product.name} />);
-      lastCategory = product.category;
-    });
-    return (
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Price</th>
-          </tr>
-        </thead>
-        <tbody>{rows}</tbody>
-      </table>
-    );
-  }
-}
-
-class SearchBar extends React.Component {
-  render() {
-    return (
-      <form>
-        <input type="text" placeholder="Search..." value={this.props.filterText} />
-        <p>
-          <input type="checkbox" checked={this.props.inStockOnly} />
-          {' '}
-          Only show products in stock
-        </p>
-      </form>
-    );
-  }
-}
-
-class FilterableProductTable extends React.Component {
+class Background extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      filterText: '',
-      inStockOnly: false
+      show_pic: 0,
     };
   }
 
+  componentDidMount() {
+    this.timerID = setInterval(
+      () => this.tick(),
+      30000
+    );
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timerID);
+  }
+
+  tick() {
+    this.setState({
+      show_pic: (this.state.show_pic + 1) % backPicArray.length,
+    });
+  }
+
+  render() {
+
+    return (
+      <img src={backPicArray[this.state.show_pic]} alt='' />
+    );
+  }
+}
+
+class Panel extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+
+    }
+  }
+
+
+}
+
+class Album extends React.Component {
   render() {
     return (
-      <div>
-        <SearchBar
-          filterText={this.state.filterText}
-          inStockOnly={this.state.inStockOnly}
-        />
-        <ProductTable
-          products={this.props.products}
-          filterText={this.state.filterText}
-          inStockOnly={this.state.inStockOnly}
-        />
+      <section className="album" >
+        <section className="img-sec">
+
+        </section>
+        <nav className="controller-nav">
+
+        </nav>
+      </section>
+    );
+  }
+}
+
+class App extends React.Component {
+  render() {
+    return (
+      <div className="App">
+        {/* <header>
+          <h1 className="App-title">My First App</h1>
+        </header> */}
+        {/* <Background /> */}
+        <Album />
       </div>
     );
   }
 }
 
-var PRODUCTS = [
-  { category: 'Sporting Goods', price: '$49.99', stocked: true, name: 'Football' },
-  { category: 'Sporting Goods', price: '$9.99', stocked: true, name: 'Baseball' },
-  { category: 'Sporting Goods', price: '$29.99', stocked: false, name: 'Basketball' },
-  { category: 'Electronics', price: '$99.99', stocked: true, name: 'iPod Touch' },
-  { category: 'Electronics', price: '$399.99', stocked: false, name: 'iPhone 5' },
-  { category: 'Electronics', price: '$199.99', stocked: true, name: 'Nexus 7' }
-];
+// =======================================
 
 ReactDOM.render(
-  <FilterableProductTable products={PRODUCTS} />,
+  <App />,
   document.getElementById('container')
-);
-
+)
