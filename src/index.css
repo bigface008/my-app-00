@@ -29,10 +29,10 @@ html, body {
 
 .img-figure {
   position: absolute;
-  width: 260px;
-  height: 300px;
+  width: 200px;
+  height: 225px;
   margin: 0;
-  padding: 20px;
+  padding: 0px;
 
   background-color: #fff;
   box-sizing: border-box;
@@ -49,7 +49,7 @@ figcaption {
 }
 
 .figure {
-  max-width: 220px; 
+  max-width: 200px; 
 }
 /* Image -- end */
 

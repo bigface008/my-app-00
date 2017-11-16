@@ -2,10 +2,17 @@ import React from 'react'
 import ReactDOM from 'react-dom';
 
 /**
- * Get random value between low & high
+ * Get random value between low & high.
  */
 function getRangeRandom(low, high) {
     return Math.ceil(low + Math.random() * (high - low));
+}
+
+/**
+ * Get random deg between -30 & 30.
+ */
+function get30DegRandom() {
+    return Math.ceil(Math.random() * 60 - 30);
 }
 
 // Get Info of Pictures
@@ -41,15 +48,36 @@ export default class Album extends React.Component {
                     topY: 0,
                 },
             },
-            imgsArrangeArr: Array(imageDatas.length).fill({
-                pos: {
-                    top: 0,
-                    left: 0,
-                }
-            }),
+            imgsArrangeArr: ((len) => {
+                let tempArr = [];
+                for (let i = 0; i < len; i++) tempArr.push({
+                    pos: {
+                        left: 0,
+                        top: 0,
+                    },
+                    rotate: 0,
+                    isInverse: false
+                });
+                return tempArr;
+            })(imageDatas.length),
         };
 
         this.rearrange = this.rearrange.bind(this);
+    }
+
+    /**
+     * Inverse the picture.
+     * @param index Input index of the inversing picture.
+     * @returns {Function} A real function put into use.
+     */
+    inverse() {
+        return function (index) {
+            let imgsArrangeArr = this.state.imgsArrangeArr;
+            imgsArrangeArr[index].isInverse = !imgsArrangeArr[index].isInverse;
+            this.setState({
+                imgsArrangeArr: imgsArrangeArr,
+            });
+        }.bind(this);
     }
 
     /* 
@@ -73,37 +101,47 @@ export default class Album extends React.Component {
             topImgSpliceIndex = 0,
             imgsArrangeCenterArr = imgsArrangeArr.splice(centerIndex, 1);
 
-        console.log('centerIndex=', centerIndex);
-        console.log('topImgNum=', topImgNum);
-        console.log('centerPos.top=' + centerPos.top);
-        console.log('centerPos.left=' + centerPos.left);
-        console.log('hPosRange=' + hPosRange);
-        console.log('vPosRange=' + vPosRange);
-        console.log('hPosRangeLeftSecX=' + hPosRangeLeftSecX);
-        console.log('hPosRangeRightSecX=' + hPosRangeRightSecX);
-        console.log('hPosRangeY=' + hPosRangeY);
-        console.log('vPosRangeTopY=' + vPosRangeTopY);
-        console.log('vPosRangeX=' + vPosRangeX);
-
         // Fisrt, put the picture of centerIndex to the center
         imgsArrangeCenterArr[0].pos = centerPos;
-        console.log('centerPos.top=' + centerPos.top);
-        console.log('centerPos.left=' + centerPos.left);
-        console.log('imgsArrangeCenterArr[0].top', imgsArrangeCenterArr[0].pos.top);
-        console.log('imgsArrangeCenterArr[0].left', imgsArrangeCenterArr[0].pos.left);
+        imgsArrangeCenterArr[0].rotate = 0;
 
         // Get info of the picture of Top 
         topImgSpliceIndex = Math.ceil(Math.random() * (imgsArrangeArr.length - topImgNum));
         imgsArrangeTopArr = imgsArrangeArr.splice(topImgSpliceIndex, topImgNum);
 
+        // imgsArrangeArr[0].pos = centerPos;
+        // for (let i = 1; i < imgsArrangeArr.length; i++) {
+        //     let hPosRangeLORX = null;
+
+        //     // The fisrt part is on the left. The next part is on the right.
+        //     if (i < k) {
+        //         hPosRangeLORX = hPosRangeLeftSecX;
+        //     }
+        //     else {
+        //         hPosRangeLORX = hPosRangeRightSecX;
+        //     }
+
+        //     imgsArrangeArr[i].pos = {
+        //         top: getRangeRandom(hPosRangeY[0], hPosRangeY[1]),
+        //         left: getRangeRandom(hPosRangeLORX[0], hPosRangeLORX[1])
+        //     }
+
+
+        // }
+
+        // for (let i = 0; i < imgsArrangeArr.length; i++) {
+        //     console.log('top',imgsArrangeArr[i].pos.top);
+        //     console.log('left',imgsArrangeArr[i].pos.left);
+        // }
         // Locate the pictures of Top.
         imgsArrangeTopArr.forEach((value, index) => {
-            imgsArrangeTopArr[index].pos = {
-                top: getRangeRandom(vPosRangeTopY[0], vPosRangeTopY[1]),
-                left: getRangeRandom(vPosRangeX[0], vPosRangeX[1])
+            imgsArrangeTopArr[index] = {
+                pos: {
+                    top: getRangeRandom(vPosRangeTopY[0], vPosRangeTopY[1]),
+                    left: getRangeRandom(vPosRangeX[0], vPosRangeX[1])
+                },
+                rotate: get30DegRandom()
             };
-            console.log('top=', imgsArrangeTopArr[index].pos.top);
-            console.log('left=', imgsArrangeTopArr[index].pos.left);
         });
 
         // Locate the pictures on right & left.
@@ -118,21 +156,21 @@ export default class Album extends React.Component {
                 hPosRangeLORX = hPosRangeRightSecX;
             }
 
-            imgsArrangeArr[i].pos = {
-                top: getRangeRandom(hPosRangeY[0], hPosRangeY[1]),
-                left: getRangeRandom(hPosRangeLORX[0], hPosRangeLORX[1])
+            imgsArrangeArr[i] = {
+                pos: {
+                    top: getRangeRandom(hPosRangeY[0], hPosRangeY[1]),
+                    left: getRangeRandom(hPosRangeLORX[0], hPosRangeLORX[1])
+                },
+                rotate: get30DegRandom(),
             }
-            console.log('i', i);
-            console.log('imgsArrangeArr[i].pos.top=', imgsArrangeArr[i].pos.top);
-            console.log('imgsArrangeArr[i].pos.left=', imgsArrangeArr[i].pos.left);
+            imgsArrangeArr[i].rotate = get30DegRandom();
         };
-        console.log('topImgSpliceIndex', topImgSpliceIndex);
         if (imgsArrangeTopArr && imgsArrangeTopArr[0]) {
             imgsArrangeArr.splice(topImgSpliceIndex, 0, imgsArrangeTopArr[0]);
         }
+        console.log('imgsArrangeTopArr[0]', imgsArrangeTopArr[0]);
 
         imgsArrangeArr.splice(centerIndex, 0, imgsArrangeCenterArr[0]);
-        console.log('imgsArrangeArr', imgsArrangeArr);
         this.setState({
             imgsArrangeArr: imgsArrangeArr,
         });
@@ -169,8 +207,8 @@ export default class Album extends React.Component {
                     y: [-halfImgH, albumH - halfImgH],
                 },
                 vPosRange: {      // Range of y
-                    x: [-halfImgH, halfAlbumH - halfImgH * 3],
-                    topY: [halfImgW - imgW, halfImgW]
+                    topY: [-halfImgH, halfAlbumH - halfImgH * 3],
+                    x: [halfAlbumW - imgW, halfAlbumW]
                 },
             },
         },
@@ -208,17 +246,26 @@ export default class Album extends React.Component {
 
 class ImgFigure extends React.Component {
     render() {
-
         let styleObj = {};
+        let imgFigureClassName = 'img-figure';
 
         // If the position of the picture is written, use it.
         if (this.props.arrange) {
-            styleObj = this.props.arrange.pos;
+            let top_1 = this.props.arrange.pos.top;
+            let left_1 = this.props.arrange.pos.left;
+            let rotate_1 = this.props.arrange.rotate;
+            styleObj = {
+                top: top_1,
+                left: left_1,
+                transform: 'rotate(' + rotate_1 + 'deg)',
+            };
+            imgFigureClassName += this.props.arrange.isInverse ? ' is-inverse' : '';
         };
+
 
         // console.log(this.props.data.title, styleObj);
         return (
-            <figure className="img-figure" style={styleObj}>
+            <figure className={imgFigureClassName} style={styleObj}>
                 <img className="figure" src={this.props.data.imgURL}
                     alt={this.props.data.title}
                 />
