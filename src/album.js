@@ -41,18 +41,12 @@ export default class Album extends React.Component {
                     topY: 0,
                 },
             },
-            imgsArrangeArr: ((len) => {
-                let tempArr = [];
-                for (let i = 0; i < len; i++) {
-                    tempArr.push({
-                        pos: {
-                            top: 0,
-                            left: 0,
-                        }
-                    });
+            imgsArrangeArr: Array(imageDatas.length).fill({
+                pos: {
+                    top: 0,
+                    left: 0,
                 }
-                return tempArr;
-            })(imageDatas.length),
+            }),
         };
 
         this.rearrange = this.rearrange.bind(this);
@@ -79,6 +73,8 @@ export default class Album extends React.Component {
             topImgSpliceIndex = 0,
             imgsArrangeCenterArr = imgsArrangeArr.splice(centerIndex, 1);
 
+        console.log('centerIndex=', centerIndex);
+        console.log('topImgNum=', topImgNum);
         console.log('centerPos.top=' + centerPos.top);
         console.log('centerPos.left=' + centerPos.left);
         console.log('hPosRange=' + hPosRange);
@@ -87,9 +83,14 @@ export default class Album extends React.Component {
         console.log('hPosRangeRightSecX=' + hPosRangeRightSecX);
         console.log('hPosRangeY=' + hPosRangeY);
         console.log('vPosRangeTopY=' + vPosRangeTopY);
+        console.log('vPosRangeX=' + vPosRangeX);
 
         // Fisrt, put the picture of centerIndex to the center
         imgsArrangeCenterArr[0].pos = centerPos;
+        console.log('centerPos.top=' + centerPos.top);
+        console.log('centerPos.left=' + centerPos.left);
+        console.log('imgsArrangeCenterArr[0].top', imgsArrangeCenterArr[0].pos.top);
+        console.log('imgsArrangeCenterArr[0].left', imgsArrangeCenterArr[0].pos.left);
 
         // Get info of the picture of Top 
         topImgSpliceIndex = Math.ceil(Math.random() * (imgsArrangeArr.length - topImgNum));
@@ -100,7 +101,9 @@ export default class Album extends React.Component {
             imgsArrangeTopArr[index].pos = {
                 top: getRangeRandom(vPosRangeTopY[0], vPosRangeTopY[1]),
                 left: getRangeRandom(vPosRangeX[0], vPosRangeX[1])
-            }
+            };
+            console.log('top=', imgsArrangeTopArr[index].pos.top);
+            console.log('left=', imgsArrangeTopArr[index].pos.left);
         });
 
         // Locate the pictures on right & left.
@@ -119,21 +122,25 @@ export default class Album extends React.Component {
                 top: getRangeRandom(hPosRangeY[0], hPosRangeY[1]),
                 left: getRangeRandom(hPosRangeLORX[0], hPosRangeLORX[1])
             }
-
-            if (imgsArrangeTopArr && imgsArrangeTopArr[0]) {
-                imgsArrangeArr.splice(topImgSpliceIndex, 0, imgsArrangeTopArr[0]);
-            }
-
-            imgsArrangeArr.splice(centerIndex, 0, imgsArrangeCenterArr[0]);
-            this.setState({
-                imgsArrangeArr: imgsArrangeArr,
-            });
+            console.log('i', i);
+            console.log('imgsArrangeArr[i].pos.top=', imgsArrangeArr[i].pos.top);
+            console.log('imgsArrangeArr[i].pos.left=', imgsArrangeArr[i].pos.left);
+        };
+        console.log('topImgSpliceIndex', topImgSpliceIndex);
+        if (imgsArrangeTopArr && imgsArrangeTopArr[0]) {
+            imgsArrangeArr.splice(topImgSpliceIndex, 0, imgsArrangeTopArr[0]);
         }
 
+        imgsArrangeArr.splice(centerIndex, 0, imgsArrangeCenterArr[0]);
+        console.log('imgsArrangeArr', imgsArrangeArr);
+        this.setState({
+            imgsArrangeArr: imgsArrangeArr,
+        });
     }
 
     // Calculate the position for each ImgFigure after loaded
     componentDidMount() {
+        console.log('imageData.lenght', imageDatas.length);
 
         // Get the size of Album
         let albumDOM = ReactDOM.findDOMNode(this.refs.album),
@@ -142,7 +149,6 @@ export default class Album extends React.Component {
             halfAlbumW = Math.ceil(albumW / 2),
             halfAlbumH = Math.ceil(albumH / 2);
 
-        console.log('albumW', albumW, ';albumH', albumH);
         // Get the size of ImgFigure
         let albumImgFigureDOM = ReactDOM.findDOMNode(this.refs.albumImgFigure0),
             imgW = albumImgFigureDOM.scrollWidth,
@@ -169,7 +175,6 @@ export default class Album extends React.Component {
             },
         },
             () => {
-                console.log('After set', this.state.Constant.centerPos.left);
                 this.rearrange(0);
             }
         );
@@ -211,12 +216,7 @@ class ImgFigure extends React.Component {
             styleObj = this.props.arrange.pos;
         };
 
-        console.log(styleObj);
-        // styleObj = {
-        //     top: 50,
-        //     left: 50
-        // };
-
+        // console.log(this.props.data.title, styleObj);
         return (
             <figure className="img-figure" style={styleObj}>
                 <img className="figure" src={this.props.data.imgURL}
