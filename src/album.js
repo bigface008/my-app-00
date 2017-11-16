@@ -70,17 +70,19 @@ export default class Album extends React.Component {
      * @param index Input index of the inversing picture.
      * @returns {Function} A real function put into use.
      */
-    inverse() {
-        return function (index) {
+    inverse(index) {
+        return function () {
             let imgsArrangeArr = this.state.imgsArrangeArr;
+            // console.log('inverse', index, '=', imgsArrangeArr[index].isInverse);
             imgsArrangeArr[index].isInverse = !imgsArrangeArr[index].isInverse;
+            // console.log('inverse', index, '=', imgsArrangeArr[index].isInverse);
             this.setState({
                 imgsArrangeArr: imgsArrangeArr,
             });
         }.bind(this);
     }
 
-    /* 
+    /**
     * Rearrange all the pictures
     * @param centerIndex indicates which picture is at the center
     */
@@ -109,30 +111,6 @@ export default class Album extends React.Component {
         topImgSpliceIndex = Math.ceil(Math.random() * (imgsArrangeArr.length - topImgNum));
         imgsArrangeTopArr = imgsArrangeArr.splice(topImgSpliceIndex, topImgNum);
 
-        // imgsArrangeArr[0].pos = centerPos;
-        // for (let i = 1; i < imgsArrangeArr.length; i++) {
-        //     let hPosRangeLORX = null;
-
-        //     // The fisrt part is on the left. The next part is on the right.
-        //     if (i < k) {
-        //         hPosRangeLORX = hPosRangeLeftSecX;
-        //     }
-        //     else {
-        //         hPosRangeLORX = hPosRangeRightSecX;
-        //     }
-
-        //     imgsArrangeArr[i].pos = {
-        //         top: getRangeRandom(hPosRangeY[0], hPosRangeY[1]),
-        //         left: getRangeRandom(hPosRangeLORX[0], hPosRangeLORX[1])
-        //     }
-
-
-        // }
-
-        // for (let i = 0; i < imgsArrangeArr.length; i++) {
-        //     console.log('top',imgsArrangeArr[i].pos.top);
-        //     console.log('left',imgsArrangeArr[i].pos.left);
-        // }
         // Locate the pictures of Top.
         imgsArrangeTopArr.forEach((value, index) => {
             imgsArrangeTopArr[index] = {
@@ -168,7 +146,6 @@ export default class Album extends React.Component {
         if (imgsArrangeTopArr && imgsArrangeTopArr[0]) {
             imgsArrangeArr.splice(topImgSpliceIndex, 0, imgsArrangeTopArr[0]);
         }
-        console.log('imgsArrangeTopArr[0]', imgsArrangeTopArr[0]);
 
         imgsArrangeArr.splice(centerIndex, 0, imgsArrangeCenterArr[0]);
         this.setState({
@@ -178,7 +155,6 @@ export default class Album extends React.Component {
 
     // Calculate the position for each ImgFigure after loaded
     componentDidMount() {
-        console.log('imageData.lenght', imageDatas.length);
 
         // Get the size of Album
         let albumDOM = ReactDOM.findDOMNode(this.refs.album),
@@ -228,6 +204,7 @@ export default class Album extends React.Component {
                 key={value.title}
                 ref={'albumImgFigure' + index}
                 arrange={this.state.imgsArrangeArr[index]}
+                inverse={this.inverse(index)}
             />);
         }.bind(this));
 
@@ -245,6 +222,19 @@ export default class Album extends React.Component {
 }
 
 class ImgFigure extends React.Component {
+    constructor() {
+        super();
+        this.handleClick = this.handleClick.bind(this);
+    }
+    /**
+     * Deal with click on ImgFigure
+     */
+    handleClick(e) {
+        // this.props.inverse();
+        e.stopPropagation();
+        e.preventDefault();
+    }
+
     render() {
         let styleObj = {};
         let imgFigureClassName = 'img-figure';
@@ -259,18 +249,23 @@ class ImgFigure extends React.Component {
                 left: left_1,
                 transform: 'rotate(' + rotate_1 + 'deg)',
             };
-            imgFigureClassName += this.props.arrange.isInverse ? ' is-inverse' : '';
+            imgFigureClassName += this.props.arrange.isInverse ? '-is-inverse' : '';
         };
 
-
+        // console.log('imgFigureClassName', imgFigureClassName);
         // console.log(this.props.data.title, styleObj);
         return (
-            <figure className={imgFigureClassName} style={styleObj}>
+            <figure className={imgFigureClassName} style={styleObj} onClick={this.handleClick}>
                 <img className="figure" src={this.props.data.imgURL}
                     alt={this.props.data.title}
                 />
                 <figcaption>
                     <h2 className="img-title">{this.props.data.title}</h2>
+                    {/* <div className="img-back" onClick={this.handleClick}>
+                        <p>
+                            {this.props.data.desc}
+                        </p>
+                    </div> */}
                 </figcaption>
             </figure>
         );

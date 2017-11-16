@@ -1,4 +1,5 @@
-html, body {
+html,
+body {
   width: 100%;
   height: 100%;
   background-color: #222;
@@ -10,15 +11,21 @@ html, body {
   height: 100%;
 }
 
+
 /* Album -- start */
+
 .album {
   position: relative;
   width: 100%;
   height: 680px;
 }
+
+
 /* Album -- end */
 
+
 /* Image -- start */
+
 .img-sec {
   position: relative;
   width: 100%;
@@ -29,6 +36,22 @@ html, body {
 
 .img-figure {
   position: absolute;
+  width: 320px;
+  height: 360px;
+  margin: 0;
+  padding: 40px;
+  background-color: #fff;
+  box-sizing: border-box;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  /* &.is-inverse {
+    transform: rotateY(180deg);
+  } */
+}
+
+
+/* .img-figure-is-inverse {
+  position: absolute;
   width: 200px;
   height: 225px;
   margin: 0;
@@ -36,7 +59,9 @@ html, body {
 
   background-color: #fff;
   box-sizing: border-box;
-}
+  transform-style: preserve-3d;
+  transform: rotateY(180deg);
+} */
 
 figcaption {
   text-align: center;
@@ -48,25 +73,41 @@ figcaption {
   font-size: 16px;
 }
 
-.figure {
-  max-width: 200px; 
+.img-back {
+  position: absolute;
+  left: 0;
+  top: 0;
+
+  width: 100%;
+  height: 100%;
+  padding: 50px 40px;
+  overflow: auto;
 }
+
+.figure {
+  max-width: 240px;
+}
+
 /* Image -- end */
 
+
 /* controller -- start */
+
 .controller-nav {
   position: absolute;
   left: 0;
   bottom: 30px;
   z-index: 101;
-
   width: 100%;
-
   text-align: center;
 }
+
+
 /* controller -- end */
 
+
 /* Panel -- start */
+
 .title_for_login {
   color: #fff;
   font-family: "Times New Roman";
@@ -83,4 +124,6 @@ figcaption {
   font-family: "Times New Roman";
   font-size: 25px;
 }
+
+
 /* Panel -- end */
