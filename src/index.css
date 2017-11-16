@@ -50,18 +50,19 @@ body {
 }
 
 
-/* .img-figure-is-inverse {
+.img-figure-is-inverse {
   position: absolute;
-  width: 200px;
-  height: 225px;
+  width: 320px;
+  height: 360px;
   margin: 0;
-  padding: 0px;
+  padding: 40px;
 
   background-color: #fff;
   box-sizing: border-box;
+  cursor: pointer;
   transform-style: preserve-3d;
   transform: rotateY(180deg);
-} */
+}
 
 figcaption {
   text-align: center;
