@@ -56,7 +56,8 @@ export default class Album extends React.Component {
                         top: 0,
                     },
                     rotate: 0,
-                    isInverse: false
+                    isInverse: false,
+                    isCenter: false,
                 });
                 return tempArr;
             })(imageDatas.length),
@@ -99,10 +100,8 @@ export default class Album extends React.Component {
             vPosRangeTopY = vPosRange.topY,
             vPosRangeX = vPosRange.x,
 
-            imgsArrangeTopArr = [],
             topImgNum = Math.ceil(Math.random() * 2),
             topImgSpliceIndex = Math.ceil(Math.random() * (imgsArrangeArr.length - topImgNum));
-        // imgsArrangeCenterArr = imgsArrangeArr.splice(centerIndex, 1);
 
         let counter_for_otherImg = 0;
         let half_judger = (imgsArrangeArr.length - topImgNum - 1) / 2;
@@ -115,6 +114,7 @@ export default class Album extends React.Component {
                     },
                     rotate: 0,
                     isInverse: false,
+                    isCenter: true,
                 };
                 continue;
             }
@@ -126,6 +126,7 @@ export default class Album extends React.Component {
                     },
                     rotate: get30DegRandom(),
                     isInverse: false,
+                    isCenter: false,
                 };
                 continue;
             }
@@ -145,12 +146,24 @@ export default class Album extends React.Component {
                     },
                     rotate: get30DegRandom(),
                     isInverse: false,
+                    isCenter: false,
                 }
             }
         }
         this.setState({
             imgsArrangeArr: imgsArrangeArr,
         });
+    }
+
+    /**
+     * Use rearrange() to lacate the picture to the center
+     * @param index, the index of the picture
+     * @param return {Fucntion}
+     */
+    center(index) {
+        return function() {
+            this.rearrange(index);
+        }.bind(this);
     }
 
     // Calculate the position for each ImgFigure after loaded
@@ -197,7 +210,7 @@ export default class Album extends React.Component {
                     x: [halfAlbumW - imgW, halfAlbumW]
                 },
             },
-            imgsArrangeArr: tempArr,
+            // imgsArrangeArr: tempArr,
         },
             () => {
                 this.rearrange(0);
@@ -216,6 +229,7 @@ export default class Album extends React.Component {
                 ref={'albumImgFigure' + index}
                 arrange={this.state.imgsArrangeArr[index]}
                 inverse={this.inverse(index)}
+                center={this.center(index)}
             />);
         }.bind(this));
 
@@ -241,7 +255,12 @@ class ImgFigure extends React.Component {
      * Deal with click on ImgFigure
      */
     handleClick(e) {
-        this.props.inverse();
+        if (this.props.arrange.isCenter) {
+            this.props.inverse();
+        }
+        else {
+            this.props.center();
+        }
         e.stopPropagation();
         e.preventDefault();
     }
@@ -255,27 +274,38 @@ class ImgFigure extends React.Component {
             let top_1 = this.props.arrange.pos.top;
             let left_1 = this.props.arrange.pos.left;
             let rotate_1 = this.props.arrange.rotate;
+            let z_index = 101;
+            if (this.props.arrange.isCenter) {
+                z_index = 102;
+            }
             styleObj = {
                 top: top_1,
                 left: left_1,
                 transform: 'rotate(' + rotate_1 + 'deg)',
+                zIndex: z_index,
             };
-            imgFigureClassName += this.props.arrange.isInverse ? '-is-inverse' : '';
+            // imgFigureClassName += this.props.arrange.isInverse ? '-is-inverse' : '';
         };
 
         return (
             <figure className={imgFigureClassName} style={styleObj} onClick={this.handleClick}>
-                <img className="figure" src={this.props.data.imgURL}
-                    alt={this.props.data.title}
-                />
-                <figcaption>
-                    <h2 className="img-title">{this.props.data.title}</h2>
-                    {/* <div className="img-back" onClick={this.handleClick}>
-                        <p>
+                <div className="wrap-position">
+                    <div className="img-content">
+                        <div className="img-warp">
+                            <img className="figure" src={this.props.data.imgURL}
+                                alt={this.props.data.title}
+                            />
+                        </div>
+                        <figcaption>
+                            <h2 className="img-title">{this.props.data.title}</h2>
+                        </figcaption>
+                    </div>
+                    <div className="img-back" onClick={this.handleClick}>
+                        <p className="desc">
                             {this.props.data.desc}
                         </p>
-                    </div> */}
-                </figcaption>
+                    </div>
+                </div>
             </figure>
         );
     }
