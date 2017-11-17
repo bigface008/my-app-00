@@ -231,6 +231,8 @@ export default class Album extends React.Component {
                 inverse={this.inverse(index)}
                 center={this.center(index)}
             />);
+
+            controllerUnits.push(<ControllerUnit key={'button' + index}/>);
         }.bind(this));
 
         return (
@@ -307,6 +309,28 @@ class ImgFigure extends React.Component {
                     </div>
                 </div>
             </figure>
+        );
+    }
+}
+
+// ControllerUnit
+
+class ControllerUnit extends React.Component {
+    constructor() {
+        super();
+        this.handleClick = this.handleClick.bind(this);
+    }
+
+    handleClick(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    render() {
+        return(
+            <span className="controller-unit" onClick={this.handleClick}>
+
+            </span>
         );
     }
 }
