@@ -2,12 +2,12 @@
     {
         "fileName": "timg1.jpg",
         "title": "Distance",
-        "desc": "Here he comes Here coms Speed Racer."
+        "desc": "二人の距離は。"
     },
     {
         "fileName": "timg2.jpg",
-        "title": "The Graden of Words",
-        "desc": "Here he comes Here coms Speed Racer."
+        "title": "言の葉の庭",
+        "desc": "木々おのおの　名乗り出たる　木の芽かな。"
     },
     {
         "fileName": "timg3.jpg",
@@ -31,23 +31,18 @@
     },
     {
         "fileName": "timg7.jpg",
-        "title": "Pic7",
-        "desc": "Here he comes Here coms Speed Racer."
-    },
-    {
-        "fileName": "timg8.jpg",
-        "title": "Pic8",
-        "desc": "Here he comes Here coms Speed Racer."
+        "title": "Rain Fall",
+        "desc": "雨。"
     },
     {
         "fileName": "timg9.jpg",
         "title": "Pic9",
-        "desc": "Here he comes Here coms Speed Racer."
+        "desc": "いつかサヨナラがやってきて、いつかコンニチワがやってくる。"
     },
     {
         "fileName": "timg10.jpg",
-        "title": "Pic10",
-        "desc": "Here he comes Here coms Speed Racer."
+        "title": "Books",
+        "desc": "本"
     },
     {
         "fileName": "timg11.jpg",
@@ -57,17 +52,17 @@
     {
         "fileName": "timg12.jpg",
         "title": "Pic12",
-        "desc": "Here he comes Here coms Speed Racer."
+        "desc": "いつも人はサヨナラを用意して 生きなければならない。"
     },
     {
         "fileName": "timg13.jpg",
-        "title": "Pic13",
-        "desc": "Here he comes Here coms Speed Racer."
+        "title": "Alone",
+        "desc": "寂しい？"
     },
     {
         "fileName": "timg14.jpg",
-        "title": "Pic14",
-        "desc": "Here he comes Here coms Speed Racer."
+        "title": "Sakura In Spring",
+        "desc": "さよなら。またいつか会いましょう。"
     },
     {
         "fileName": "timg15.jpg",
@@ -76,7 +71,7 @@
     },
     {
         "fileName": "timg16.jpg",
-        "title": "Pic16",
-        "desc": "Here he comes Here coms Speed Racer."
+        "title": "Your Name",
+        "desc": "君の名は。"
     }
 ]
