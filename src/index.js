@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom';
 import './index.css';
 import Panel from './panel.js'
-import Album from './album.js'
+import Album from './album'
 
 // Main App
 

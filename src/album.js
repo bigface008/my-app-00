@@ -253,7 +253,7 @@ export default class Album extends React.Component {
     }
 }
 
-class ImgFigure extends React.Component {
+export class ImgFigure extends React.Component {
     constructor() {
         super();
         this.handleClick = this.handleClick.bind(this);
@@ -351,3 +351,5 @@ class ControllerUnit extends React.Component {
         );
     }
 }
+
+// module.exports = Album;
